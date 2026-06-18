@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amazon Clone</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="navbar">
+    <div class="logo">amazon<span>.in</span></div>
+
+    <div class="location">
+      <small>Deliver to</small>
+      <b>India</b>
+    </div>
+
+    <div class="search-box">
+      <select id="categorySelect">
+        <option value="all">All</option>
+        <option value="electronics">Electronics</option>
+        <option value="fashion">Fashion</option>
+        <option value="home">Home</option>
+      </select>
+      <input type="text" id="searchInput" placeholder="Search Amazon" />
+      <button onclick="searchProducts()">🔍</button>
+    </div>
+
+    <div class="nav-item">
+      <small>Hello, sign in</small>
+      <b>Account</b>
+    </div>
+
+    <div class="nav-item">
+      <small>Returns</small>
+      <b>& Orders</b>
+    </div>
+
+    <div class="cart" onclick="toggleCart()">
+      🛒 Cart <span id="cartCount">0</span>
+    </div>
+  </header>
+
+  <!-- Second Navbar -->
+  <nav class="sub-nav">
+    <span>☰ All</span>
+    <span>Fresh</span>
+    <span>Mobiles</span>
+    <span>Fashion</span>
+    <span>Electronics</span>
+    <span>Home & Kitchen</span>
+    <span>Today's Deals</span>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Great Indian Sale</h1>
+      <p>Up to 70% off on electronics, fashion and home products</p>
+      <button>Shop Now</button>
+    </div>
+  </section>
+
+  <!-- Product Section -->
+  <main class="product-section">
+    <h2>Recommended Products</h2>
+
+    <div class="products" id="productContainer">
+      <!-- Products will be loaded by JavaScript -->
+    </div>
+  </main>
+
+  <!-- Cart Sidebar -->
+  <aside class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h2>Your Cart</h2>
+      <button onclick="toggleCart()">✖</button>
+    </div>
+
+    <div id="cartItems"></div>
+
+    <div class="cart-footer">
+      <h3>Total: ₹<span id="cartTotal">0</span></h3>
+      <button onclick="checkout()">Checkout</button>
+    </div>
+  </aside>
+
+  <script src="script.js"></script>
+</body>
+</html>
