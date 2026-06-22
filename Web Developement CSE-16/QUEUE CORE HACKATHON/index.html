@@ -1,0 +1,1316 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Queue Cure 26</title>
+    <style>
+:root {
+  color-scheme: light;
+  --ink: #17211d;
+  --muted: #68756f;
+  --line: #d9e2dd;
+  --paper: #f7faf8;
+  --panel: #ffffff;
+  --accent: #0f766e;
+  --accent-strong: #115e59;
+  --gold: #c27803;
+  --rose: #be123c;
+  --blue: #2563eb;
+  --shadow: 0 18px 45px rgba(23, 33, 29, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: #13221d;
+  color: white;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  background: #e3f7f2;
+  color: var(--accent-strong);
+  font-weight: 900;
+}
+
+.brand h1,
+.topbar h2,
+.panel h3 {
+  margin: 0;
+  letter-spacing: 0;
+}
+
+.brand h1 {
+  font-size: 20px;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: #6b8f86;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.sidebar .eyebrow {
+  color: #9dd7cc;
+}
+
+.role-tabs {
+  display: grid;
+  gap: 8px;
+}
+
+.role-tab {
+  min-height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: white;
+  text-align: left;
+  padding: 0 14px;
+}
+
+.role-tab.is-active {
+  background: #f6fffc;
+  color: var(--accent-strong);
+}
+
+.role-tab.is-locked::after {
+  content: "Locked";
+  float: right;
+  color: #c9d8d3;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.role-tab.is-active::after {
+  color: var(--accent-strong);
+}
+
+.live-card {
+  margin-top: auto;
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.live-card p {
+  margin: 4px 0 0;
+  color: #c9d8d3;
+  font-size: 13px;
+}
+
+.pulse {
+  width: 10px;
+  height: 10px;
+  margin-top: 5px;
+  border-radius: 999px;
+  background: #4ade80;
+  box-shadow: 0 0 0 8px rgba(74, 222, 128, 0.14);
+}
+
+main {
+  padding: 28px;
+  overflow: auto;
+}
+
+.topbar,
+.section-head,
+.button-row,
+.top-actions {
+  display: flex;
+  align-items: center;
+}
+
+.topbar,
+.section-head {
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.topbar {
+  margin-bottom: 20px;
+}
+
+.topbar h2 {
+  font-size: 28px;
+}
+
+.top-actions,
+.button-row {
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+select,
+input {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+  color: var(--ink);
+  padding: 0 12px;
+}
+
+.top-actions select {
+  min-width: 180px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.metric,
+.panel {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.metric {
+  padding: 18px;
+}
+
+.metric span,
+.token-card span,
+.current-patient span {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.metric strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 28px;
+}
+
+.view {
+  display: none;
+}
+
+.view.is-active {
+  display: grid;
+  gap: 20px;
+}
+
+.panel {
+  padding: 22px;
+}
+
+.split-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+  gap: 22px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+label {
+  display: grid;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.primary-button,
+.secondary-button,
+.ghost-button,
+.danger-button {
+  min-height: 42px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0 15px;
+  font-weight: 800;
+}
+
+.primary-button {
+  background: var(--accent);
+  color: white;
+}
+
+.secondary-button {
+  background: #e7f5f2;
+  color: var(--accent-strong);
+  border-color: #b9ded6;
+}
+
+.ghost-button {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+.danger-button {
+  background: #fff1f2;
+  color: var(--rose);
+  border-color: #fecdd3;
+}
+
+.form-grid .primary-button {
+  align-self: end;
+}
+
+.token-card,
+.current-patient {
+  border-radius: 8px;
+  background: linear-gradient(135deg, #e7f5f2, #fff9e8);
+  padding: 22px;
+}
+
+.token-card strong,
+.current-patient strong {
+  display: block;
+  margin: 8px 0;
+  font-size: 34px;
+}
+
+.token-card p,
+.current-patient p,
+.muted {
+  color: var(--muted);
+  margin: 0;
+}
+
+.progress-track {
+  height: 10px;
+  margin-top: 22px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(15, 118, 110, 0.14);
+}
+
+.progress-track div {
+  width: 0%;
+  height: 100%;
+  background: var(--accent);
+  transition: width 240ms ease;
+}
+
+.badge {
+  border-radius: 999px;
+  background: #fff7ed;
+  color: var(--gold);
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.queue-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.queue-chip {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  background: #fbfdfc;
+}
+
+.queue-chip strong {
+  display: block;
+  font-size: 22px;
+}
+
+.queue-chip small {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.queue-chip.is-called {
+  border-color: #93c5fd;
+  background: #eff6ff;
+}
+
+.queue-chip.is-mine {
+  border-color: #5eead4;
+  background: #f0fdfa;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  margin-top: 18px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+
+th,
+td {
+  border-bottom: 1px solid var(--line);
+  padding: 13px 10px;
+  text-align: left;
+}
+
+th {
+  color: var(--muted);
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+td {
+  vertical-align: middle;
+}
+
+.status {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 5px 9px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.status.WAITING {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status.CALLED {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status.COMPLETED {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status.SKIPPED {
+  background: #ffe4e6;
+  color: #9f1239;
+}
+
+.row-actions {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.row-actions button {
+  min-height: 32px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+  padding: 0 10px;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.doctor-console {
+  display: grid;
+  grid-template-columns: 1fr minmax(260px, 0.8fr);
+  gap: 22px;
+  align-items: end;
+}
+
+.doctor-console .button-row {
+  grid-column: 1 / -1;
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.chart-panel {
+  grid-column: span 1;
+}
+
+.bars {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: 92px 1fr 34px;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.bar-track {
+  height: 12px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #edf2ef;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--blue);
+}
+
+.access-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: none;
+  place-items: center;
+  padding: 18px;
+  background: rgba(19, 34, 29, 0.58);
+}
+
+.access-modal.is-open {
+  display: grid;
+}
+
+.access-dialog {
+  position: relative;
+  width: min(420px, 100%);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+.access-dialog h3 {
+  margin: 0 0 8px;
+  font-size: 24px;
+  letter-spacing: 0;
+}
+
+.access-form {
+  display: grid;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+  color: var(--muted);
+  font-weight: 900;
+}
+
+#toast {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  max-width: 360px;
+  transform: translateY(20px);
+  opacity: 0;
+  pointer-events: none;
+  border-radius: 8px;
+  background: #13221d;
+  color: white;
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+#toast.is-visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+@media (max-width: 980px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    min-height: auto;
+  }
+
+  .role-tabs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .role-tab {
+    text-align: center;
+  }
+
+  .stats-grid,
+  .analytics-grid,
+  .split-panel,
+  .doctor-console {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  main,
+  .sidebar {
+    padding: 18px;
+  }
+
+  .topbar,
+  .section-head {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .top-actions {
+    width: 100%;
+  }
+
+  .top-actions select,
+  .top-actions button,
+  .button-row button {
+    flex: 1;
+  }
+
+  .role-tabs,
+  .stats-grid,
+  .form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .panel {
+    padding: 18px;
+  }
+
+  .token-card strong,
+  .current-patient strong {
+    font-size: 28px;
+  }
+}
+    </style>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">QC</div>
+          <div>
+            <p class="eyebrow">Queue Cure 26</p>
+            <h1>Clinic Queue OS</h1>
+          </div>
+        </div>
+
+        <nav class="role-tabs" aria-label="Workspace">
+          <button class="role-tab is-active" data-view="patient">Patient</button>
+          <button class="role-tab is-locked" data-view="reception">Reception</button>
+          <button class="role-tab is-locked" data-view="doctor">Doctor</button>
+          <button class="role-tab is-locked" data-view="analytics">Analytics</button>
+        </nav>
+
+        <section class="live-card">
+          <span class="pulse"></span>
+          <div>
+            <strong>Realtime demo</strong>
+            <p>Open this page in two tabs and queue changes sync instantly.</p>
+          </div>
+        </section>
+      </aside>
+
+      <main>
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Today at CityCare Clinic</p>
+            <h2 id="view-title">Patient Dashboard</h2>
+          </div>
+          <div class="top-actions">
+            <select id="doctor-filter" aria-label="Doctor queue">
+              <option value="dr-sharma">Dr. Sharma</option>
+              <option value="dr-verma">Dr. Verma</option>
+              <option value="dr-khan">Dr. Khan</option>
+            </select>
+            <button class="ghost-button" id="reset-demo" type="button">Reset</button>
+          </div>
+        </header>
+
+        <section class="stats-grid" aria-label="Queue summary">
+          <article class="metric">
+            <span>Current Token</span>
+            <strong id="current-token">-</strong>
+          </article>
+          <article class="metric">
+            <span>Waiting</span>
+            <strong id="waiting-count">0</strong>
+          </article>
+          <article class="metric">
+            <span>Avg Consult</span>
+            <strong id="avg-time">8 min</strong>
+          </article>
+          <article class="metric">
+            <span>Served Today</span>
+            <strong id="served-count">0</strong>
+          </article>
+        </section>
+
+        <section class="view is-active" id="patient-view">
+          <div class="panel split-panel">
+            <div>
+              <p class="eyebrow">Join Queue</p>
+              <h3>Get a digital token</h3>
+              <form id="join-form" class="form-grid">
+                <label>
+                  Patient name
+                  <input id="patient-name" autocomplete="name" placeholder="Aarav Mehta" required />
+                </label>
+                <label>
+                  Phone
+                  <input id="patient-phone" inputmode="tel" placeholder="98765 43210" required />
+                </label>
+                <label>
+                  Visit reason
+                  <select id="visit-reason">
+                    <option>General consultation</option>
+                    <option>Fever / infection</option>
+                    <option>Follow-up</option>
+                    <option>Report review</option>
+                  </select>
+                </label>
+                <button class="primary-button" type="submit">Join queue</button>
+              </form>
+            </div>
+            <div class="token-card" id="patient-token-card">
+              <span>Your token</span>
+              <strong id="my-token">Not joined</strong>
+              <p id="my-status">Join the queue to see your live position and wait time.</p>
+              <div class="progress-track"><div id="queue-progress"></div></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Live Queue</p>
+                <h3>Now serving and upcoming</h3>
+              </div>
+              <span class="badge" id="near-turn-badge">Waiting for token</span>
+            </div>
+            <div id="patient-list" class="queue-strip"></div>
+          </div>
+        </section>
+
+        <section class="view" id="reception-view">
+          <div class="panel">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Reception Desk</p>
+                <h3>Manage tokens</h3>
+              </div>
+              <div class="button-row">
+                <button class="secondary-button" id="add-walkin" type="button">Add walk-in</button>
+                <button class="primary-button" id="call-next" type="button">Call next</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Token</th>
+                    <th>Patient</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>ETA</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="queue-table"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="doctor-view">
+          <div class="panel doctor-console">
+            <div>
+              <p class="eyebrow">Doctor Console</p>
+              <h3 id="doctor-name">Dr. Sharma</h3>
+              <p class="muted">Call, complete, or skip patients while every waiting screen updates.</p>
+            </div>
+            <div class="current-patient" id="current-patient-card">
+              <span>Current patient</span>
+              <strong>No patient called</strong>
+              <p>Use Call next to begin.</p>
+            </div>
+            <div class="button-row">
+              <button class="primary-button" id="doctor-next" type="button">Call next</button>
+              <button class="secondary-button" id="doctor-complete" type="button">Complete</button>
+              <button class="danger-button" id="doctor-skip" type="button">Skip</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="analytics-view">
+          <div class="analytics-grid">
+            <article class="panel">
+              <p class="eyebrow">AI Wait Predictor</p>
+              <h3 id="prediction-title">32 min estimated wait</h3>
+              <p class="muted" id="prediction-copy">Based on active queue length, skipped tokens, and average consultation time.</p>
+            </article>
+            <article class="panel">
+              <p class="eyebrow">Peak Load</p>
+              <h3 id="peak-load">Moderate</h3>
+              <p class="muted">Reception can add a doctor counter when the wait crosses 45 minutes.</p>
+            </article>
+            <article class="panel chart-panel">
+              <p class="eyebrow">Queue Mix</p>
+              <div id="chart-bars" class="bars"></div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="access-modal" id="access-modal" aria-hidden="true">
+      <div class="access-dialog" role="dialog" aria-modal="true" aria-labelledby="access-title">
+        <button class="modal-close" id="close-access" type="button" aria-label="Close access dialog">x</button>
+        <p class="eyebrow">Staff access</p>
+        <h3 id="access-title">Unlock panel</h3>
+        <p class="muted" id="access-copy">Enter the access code to continue.</p>
+        <form id="access-form" class="access-form">
+          <label>
+            Access code
+            <input id="access-code" type="password" inputmode="numeric" autocomplete="off" placeholder="Enter code" required />
+          </label>
+          <button class="primary-button" type="submit">Unlock</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script>
+const STORAGE_KEY = "queue-cure-26-state";
+const MY_TOKEN_KEY = "queue-cure-26-my-token";
+const UNLOCKED_ROLES_KEY = "queue-cure-26-unlocked-roles";
+const channel = "BroadcastChannel" in window ? new BroadcastChannel("queue-cure-26") : null;
+
+const accessCodes = {
+  reception: "2468",
+  doctor: "1357",
+  analytics: "9999",
+};
+
+const doctors = {
+  "dr-sharma": { name: "Dr. Sharma", avgMinutes: 8 },
+  "dr-verma": { name: "Dr. Verma", avgMinutes: 10 },
+  "dr-khan": { name: "Dr. Khan", avgMinutes: 7 },
+};
+
+const demoPatients = [
+  ["Nisha Rao", "Fever / infection", "dr-sharma"],
+  ["Kabir Jain", "Follow-up", "dr-sharma"],
+  ["Meera Das", "Report review", "dr-verma"],
+  ["Rohan Iyer", "General consultation", "dr-sharma"],
+  ["Anika Sen", "General consultation", "dr-khan"],
+];
+
+const $ = (selector) => document.querySelector(selector);
+const state = loadState();
+let selectedDoctor = "dr-sharma";
+let pendingView = null;
+let toastTimer;
+
+function makeId() {
+  return `qc-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+function loadState() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) return JSON.parse(saved);
+
+  const initial = {
+    nextToken: 106,
+    patients: demoPatients.map(([name, reason, doctorId], index) => ({
+      id: makeId(),
+      token: 101 + index,
+      name,
+      phone: "90000 00000",
+      reason,
+      doctorId,
+      status: index === 0 && doctorId === "dr-sharma" ? "CALLED" : "WAITING",
+      joinedAt: Date.now() - (25 - index * 4) * 60_000,
+      calledAt: index === 0 ? Date.now() - 5 * 60_000 : null,
+      completedAt: null,
+    })),
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(initial));
+  return initial;
+}
+
+function saveState(announce = true) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  if (announce && channel) channel.postMessage({ type: "queue:update" });
+  render();
+}
+
+function getDoctorQueue(doctorId = selectedDoctor) {
+  return state.patients
+    .filter((patient) => patient.doctorId === doctorId)
+    .sort((a, b) => a.token - b.token);
+}
+
+function getWaitingQueue(doctorId = selectedDoctor) {
+  return getDoctorQueue(doctorId).filter((patient) => patient.status === "WAITING");
+}
+
+function getCurrentPatient(doctorId = selectedDoctor) {
+  return getDoctorQueue(doctorId).find((patient) => patient.status === "CALLED");
+}
+
+function estimateWait(patient, doctorId = selectedDoctor) {
+  if (!patient) return 0;
+  if (patient.status === "CALLED") return 0;
+  const queue = getDoctorQueue(doctorId).filter((item) => ["WAITING", "CALLED"].includes(item.status));
+  const index = queue.findIndex((item) => item.id === patient.id);
+  return Math.max(0, index) * doctors[doctorId].avgMinutes;
+}
+
+function positionOf(patient, doctorId = selectedDoctor) {
+  const active = getDoctorQueue(doctorId).filter((item) => ["WAITING", "CALLED"].includes(item.status));
+  return active.findIndex((item) => item.id === patient.id) + 1;
+}
+
+function getUnlockedRoles() {
+  return JSON.parse(sessionStorage.getItem(UNLOCKED_ROLES_KEY) || '["patient"]');
+}
+
+function unlockRole(view) {
+  const roles = new Set(getUnlockedRoles());
+  roles.add(view);
+  sessionStorage.setItem(UNLOCKED_ROLES_KEY, JSON.stringify([...roles]));
+  updateRoleLocks();
+}
+
+function canOpenView(view) {
+  return view === "patient" || getUnlockedRoles().includes(view);
+}
+
+function updateRoleLocks() {
+  const unlocked = getUnlockedRoles();
+  document.querySelectorAll(".role-tab").forEach((tab) => {
+    const locked = tab.dataset.view !== "patient" && !unlocked.includes(tab.dataset.view);
+    tab.classList.toggle("is-locked", locked);
+    tab.setAttribute("aria-label", locked ? `${tab.textContent.trim()} locked` : tab.textContent.trim());
+  });
+}
+
+function requestAccess(view) {
+  pendingView = view;
+  const labels = {
+    reception: "Reception Desk",
+    doctor: "Doctor Console",
+    analytics: "Analytics Dashboard",
+  };
+  $("#access-title").textContent = `Unlock ${labels[view]}`;
+  $("#access-copy").textContent = "This staff-only panel needs an access code.";
+  $("#access-code").value = "";
+  $("#access-modal").classList.add("is-open");
+  $("#access-modal").setAttribute("aria-hidden", "false");
+  setTimeout(() => $("#access-code").focus(), 0);
+}
+
+function closeAccessModal() {
+  pendingView = null;
+  $("#access-modal").classList.remove("is-open");
+  $("#access-modal").setAttribute("aria-hidden", "true");
+}
+
+function setView(view) {
+  if (!canOpenView(view)) {
+    requestAccess(view);
+    return;
+  }
+
+  document.querySelectorAll(".role-tab").forEach((tab) => {
+    tab.classList.toggle("is-active", tab.dataset.view === view);
+  });
+  document.querySelectorAll(".view").forEach((panel) => {
+    panel.classList.toggle("is-active", panel.id === `${view}-view`);
+  });
+  const titles = {
+    patient: "Patient Dashboard",
+    reception: "Reception Desk",
+    doctor: "Doctor Console",
+    analytics: "Analytics Dashboard",
+  };
+  $("#view-title").textContent = titles[view];
+}
+
+function joinQueue(event) {
+  event.preventDefault();
+  const patient = {
+    id: makeId(),
+    token: state.nextToken++,
+    name: $("#patient-name").value.trim(),
+    phone: $("#patient-phone").value.trim(),
+    reason: $("#visit-reason").value,
+    doctorId: selectedDoctor,
+    status: "WAITING",
+    joinedAt: Date.now(),
+    calledAt: null,
+    completedAt: null,
+  };
+  state.patients.push(patient);
+  localStorage.setItem(MY_TOKEN_KEY, patient.id);
+  $("#join-form").reset();
+  saveState();
+  showToast(`Token ${patient.token} joined ${doctors[selectedDoctor].name}'s queue.`);
+}
+
+function callNext(doctorId = selectedDoctor) {
+  const current = getCurrentPatient(doctorId);
+  if (current) current.status = "COMPLETED";
+  const next = getWaitingQueue(doctorId)[0];
+  if (!next) {
+    saveState();
+    showToast("No waiting patients in this queue.");
+    return;
+  }
+  next.status = "CALLED";
+  next.calledAt = Date.now();
+  saveState();
+  showToast(`Calling token ${next.token}: ${next.name}`);
+}
+
+function completeCurrent(doctorId = selectedDoctor) {
+  const current = getCurrentPatient(doctorId);
+  if (!current) {
+    showToast("No active patient to complete.");
+    return;
+  }
+  current.status = "COMPLETED";
+  current.completedAt = Date.now();
+  saveState();
+  showToast(`Completed token ${current.token}.`);
+}
+
+function skipCurrent(doctorId = selectedDoctor) {
+  const current = getCurrentPatient(doctorId);
+  if (!current) {
+    showToast("No active patient to skip.");
+    return;
+  }
+  current.status = "SKIPPED";
+  saveState();
+  showToast(`Skipped token ${current.token}.`);
+}
+
+function addWalkIn() {
+  const names = ["Priya Nair", "Dev Patel", "Isha Kapoor", "Arjun Roy", "Tara Bedi"];
+  const reasons = ["General consultation", "Fever / infection", "Follow-up", "Report review"];
+  const patient = {
+    id: makeId(),
+    token: state.nextToken++,
+    name: names[Math.floor(Math.random() * names.length)],
+    phone: "98888 12345",
+    reason: reasons[Math.floor(Math.random() * reasons.length)],
+    doctorId: selectedDoctor,
+    status: "WAITING",
+    joinedAt: Date.now(),
+    calledAt: null,
+    completedAt: null,
+  };
+  state.patients.push(patient);
+  saveState();
+  showToast(`Walk-in token ${patient.token} added.`);
+}
+
+function updatePatient(id, action) {
+  const patient = state.patients.find((item) => item.id === id);
+  if (!patient) return;
+
+  if (action === "call") {
+    const current = getCurrentPatient(patient.doctorId);
+    if (current) current.status = "COMPLETED";
+    patient.status = "CALLED";
+    patient.calledAt = Date.now();
+  }
+  if (action === "complete") {
+    patient.status = "COMPLETED";
+    patient.completedAt = Date.now();
+  }
+  if (action === "skip") patient.status = "SKIPPED";
+  if (action === "up") patient.token -= 1.5;
+  if (action === "down") patient.token += 1.5;
+
+  if (["up", "down"].includes(action)) normalizeTokens(patient.doctorId);
+  saveState();
+}
+
+function normalizeTokens(doctorId) {
+  getDoctorQueue(doctorId).forEach((patient, index) => {
+    patient.token = 101 + index;
+  });
+  state.nextToken = Math.max(...state.patients.map((patient) => patient.token), 100) + 1;
+}
+
+function render() {
+  const queue = getDoctorQueue();
+  const waiting = getWaitingQueue();
+  const current = getCurrentPatient();
+  const served = state.patients.filter((patient) => patient.status === "COMPLETED").length;
+
+  $("#doctor-name").textContent = doctors[selectedDoctor].name;
+  $("#current-token").textContent = current ? current.token : "-";
+  $("#waiting-count").textContent = waiting.length;
+  $("#avg-time").textContent = `${doctors[selectedDoctor].avgMinutes} min`;
+  $("#served-count").textContent = served;
+
+  renderPatientCard(queue);
+  renderPatientStrip(queue);
+  renderQueueTable(queue);
+  renderDoctorCard(current);
+  renderAnalytics(queue);
+}
+
+function renderPatientCard(queue) {
+  const myId = localStorage.getItem(MY_TOKEN_KEY);
+  const mine = state.patients.find((patient) => patient.id === myId);
+  const inSelectedQueue = mine && mine.doctorId === selectedDoctor;
+  const activeCount = queue.filter((patient) => ["WAITING", "CALLED"].includes(patient.status)).length || 1;
+
+  if (!mine) {
+    $("#my-token").textContent = "Not joined";
+    $("#my-status").textContent = "Join the queue to see your live position and wait time.";
+    $("#queue-progress").style.width = "0%";
+    $("#near-turn-badge").textContent = "Waiting for token";
+    return;
+  }
+
+  $("#my-token").textContent = `#${mine.token}`;
+
+  if (!inSelectedQueue) {
+    $("#my-status").textContent = `You are queued with ${doctors[mine.doctorId].name}. Switch doctor to view details.`;
+    $("#queue-progress").style.width = "0%";
+    $("#near-turn-badge").textContent = "Different queue";
+    return;
+  }
+
+  const position = positionOf(mine);
+  const wait = estimateWait(mine);
+  const progress = mine.status === "COMPLETED" ? 100 : Math.max(8, 100 - ((position - 1) / activeCount) * 100);
+  $("#my-status").textContent = statusCopy(mine, position, wait);
+  $("#queue-progress").style.width = `${progress}%`;
+  $("#near-turn-badge").textContent = position <= 2 && mine.status === "WAITING" ? "Your turn is near" : mine.status;
+}
+
+function statusCopy(patient, position, wait) {
+  if (patient.status === "CALLED") return "Please proceed to the consultation room now.";
+  if (patient.status === "COMPLETED") return "Your visit is completed. Thank you.";
+  if (patient.status === "SKIPPED") return "Your token was skipped. Please contact reception.";
+  return `Position ${position}. Estimated wait ${wait} minutes.`;
+}
+
+function renderPatientStrip(queue) {
+  const myId = localStorage.getItem(MY_TOKEN_KEY);
+  const active = queue.filter((patient) => ["WAITING", "CALLED"].includes(patient.status)).slice(0, 8);
+  $("#patient-list").innerHTML = active.length
+    ? active
+        .map(
+          (patient) => `
+          <article class="queue-chip ${patient.status === "CALLED" ? "is-called" : ""} ${patient.id === myId ? "is-mine" : ""}">
+            <small>${patient.status}</small>
+            <strong>#${patient.token}</strong>
+            <span>${patient.name}</span>
+          </article>`
+        )
+        .join("")
+    : `<p class="muted">No active patients in this queue.</p>`;
+}
+
+function renderQueueTable(queue) {
+  $("#queue-table").innerHTML = queue
+    .map(
+      (patient) => `
+      <tr>
+        <td><strong>#${patient.token}</strong></td>
+        <td>${patient.name}<br><small>${patient.phone}</small></td>
+        <td>${patient.reason}</td>
+        <td><span class="status ${patient.status}">${patient.status}</span></td>
+        <td>${patient.status === "WAITING" ? `${estimateWait(patient)} min` : "-"}</td>
+        <td>
+          <div class="row-actions">
+            <button data-action="call" data-id="${patient.id}">Call</button>
+            <button data-action="complete" data-id="${patient.id}">Done</button>
+            <button data-action="skip" data-id="${patient.id}">Skip</button>
+            <button data-action="up" data-id="${patient.id}">Up</button>
+            <button data-action="down" data-id="${patient.id}">Down</button>
+          </div>
+        </td>
+      </tr>`
+    )
+    .join("");
+}
+
+function renderDoctorCard(current) {
+  $("#current-patient-card").innerHTML = current
+    ? `<span>Current patient</span><strong>#${current.token} ${current.name}</strong><p>${current.reason}</p>`
+    : `<span>Current patient</span><strong>No patient called</strong><p>Use Call next to begin.</p>`;
+}
+
+function renderAnalytics(queue) {
+  const active = queue.filter((patient) => ["WAITING", "CALLED"].includes(patient.status)).length;
+  const estimated = active * doctors[selectedDoctor].avgMinutes;
+  $("#prediction-title").textContent = `${estimated} min estimated wait`;
+  $("#prediction-copy").textContent = `Based on ${active} active patients and ${doctors[selectedDoctor].avgMinutes} minutes per consultation.`;
+  $("#peak-load").textContent = estimated > 45 ? "High" : estimated > 20 ? "Moderate" : "Light";
+
+  const counts = ["WAITING", "CALLED", "COMPLETED", "SKIPPED"].map((status) => ({
+    status,
+    count: queue.filter((patient) => patient.status === status).length,
+  }));
+  const max = Math.max(...counts.map((item) => item.count), 1);
+  $("#chart-bars").innerHTML = counts
+    .map(
+      (item) => `
+      <div class="bar-row">
+        <span>${item.status}</span>
+        <div class="bar-track"><div class="bar-fill" style="width:${(item.count / max) * 100}%"></div></div>
+        <strong>${item.count}</strong>
+      </div>`
+    )
+    .join("");
+}
+
+function showToast(message) {
+  clearTimeout(toastTimer);
+  $("#toast").textContent = message;
+  $("#toast").classList.add("is-visible");
+  toastTimer = setTimeout(() => $("#toast").classList.remove("is-visible"), 2800);
+}
+
+document.querySelectorAll(".role-tab").forEach((button) => {
+  button.addEventListener("click", () => setView(button.dataset.view));
+});
+
+$("#access-form").addEventListener("submit", (event) => {
+  event.preventDefault();
+  if (!pendingView) return;
+
+  if ($("#access-code").value.trim() !== accessCodes[pendingView]) {
+    showToast("Invalid access code.");
+    $("#access-code").select();
+    return;
+  }
+
+  const nextView = pendingView;
+  unlockRole(nextView);
+  closeAccessModal();
+  setView(nextView);
+  showToast(`${$("#view-title").textContent} unlocked for this session.`);
+});
+
+$("#close-access").addEventListener("click", closeAccessModal);
+$("#access-modal").addEventListener("click", (event) => {
+  if (event.target.id === "access-modal") closeAccessModal();
+});
+
+$("#doctor-filter").addEventListener("change", (event) => {
+  selectedDoctor = event.target.value;
+  render();
+});
+
+$("#join-form").addEventListener("submit", joinQueue);
+$("#add-walkin").addEventListener("click", addWalkIn);
+$("#call-next").addEventListener("click", () => callNext());
+$("#doctor-next").addEventListener("click", () => callNext());
+$("#doctor-complete").addEventListener("click", () => completeCurrent());
+$("#doctor-skip").addEventListener("click", () => skipCurrent());
+$("#reset-demo").addEventListener("click", () => {
+  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(MY_TOKEN_KEY);
+  sessionStorage.removeItem(UNLOCKED_ROLES_KEY);
+  Object.assign(state, loadState());
+  setView("patient");
+  updateRoleLocks();
+  saveState();
+  showToast("Demo data reset.");
+});
+
+$("#queue-table").addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-action]");
+  if (!button) return;
+  updatePatient(button.dataset.id, button.dataset.action);
+});
+
+window.addEventListener("storage", (event) => {
+  if (event.key !== STORAGE_KEY || !event.newValue) return;
+  Object.assign(state, JSON.parse(event.newValue));
+  render();
+});
+
+if (channel) {
+  channel.addEventListener("message", () => {
+    Object.assign(state, loadState());
+    render();
+  });
+}
+
+updateRoleLocks();
+render();
+    </script>
+  </body>
+</html>
