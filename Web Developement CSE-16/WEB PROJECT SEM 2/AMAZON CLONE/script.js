@@ -128,7 +128,7 @@ function updateCart() {
   cartItems.innerHTML = "";
 
   let total = 0;
-
+  
   cart.forEach(item => {
     total += item.price * item.quantity;
 
